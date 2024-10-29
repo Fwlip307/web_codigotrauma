@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "685473647071",
+    "project_id": "codigotrauma-39bbe",
+    "storage_bucket": "codigotrauma-39bbe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685473647071:android:5fb309c3e20ea339a01c6a",
+        "android_client_info": {
+          "package_name": "com.duoc.codigotraumaapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ3M-pMtvoMSpBN1ENFs41GJjPrjgI-Tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
