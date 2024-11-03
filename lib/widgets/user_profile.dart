@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class UserProfileDialog extends StatelessWidget {
   final String username;
 
-  UserProfileDialog({required this.username});
+  const UserProfileDialog({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Perfil de Usuario'),
+      title: const Text('Perfil de Usuario'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -18,7 +18,7 @@ class UserProfileDialog extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          child: Text('Cerrar'),
+          child: const Text('Cerrar'),
           onPressed: () {
             Navigator.of(context).pop();
           },

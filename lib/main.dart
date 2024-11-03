@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/register_view.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'views/telegram_view.dart'; // Asegúrate de que esta línea esté presente
-
+import 'views/telegram_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,12 +25,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: '/',
+      home: const HomeView(), // Pantalla inicial
       routes: {
-        '/': (context) => HomeView(),
-        '/login': (context) => LoginView(),
-        '/register': (context) => RegisterView(),
-        '/telegram': (context) => TelegramView(),
+        '/login': (context) => const LoginView(),
+        '/register': (context) => const RegisterView(),
+        '/telegram': (context) => const TelegramView(),
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(builder: (context) => const HomeView());
       },
     );
   }
