@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'views/home_view.dart';
-import 'views/login_view.dart';
+import 'views/home_view.dart' as home;
+import 'views/login_view.dart' as login;
 import 'views/register_view.dart';
 import 'views/telegram_view.dart';
 
@@ -25,14 +25,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const HomeView(), // Pantalla inicial
+      home: const home.HomeView(), // Pantalla inicial
       routes: {
-        '/login': (context) => const LoginView(),
+        '/login': (context) => const login.LoginView(),
         '/register': (context) => const RegisterView(),
         '/telegram': (context) => const TelegramView(),
       },
       onUnknownRoute: (settings) {
-        return MaterialPageRoute(builder: (context) => const HomeView());
+        return MaterialPageRoute(builder: (context) => const home.HomeView());
       },
     );
   }

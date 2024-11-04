@@ -16,10 +16,26 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _rutController = TextEditingController();
-  final TextEditingController _professionAreaController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   String? _errorMessage;
   bool _isHospitalStaff = false;
+  String? _selectedProfession;
+
+  final List<String> _professionOptions = [
+    'Médicos de Urgencias o Emergencias',
+    'Médicos Intensivistas',
+    'Traumatólogos',
+    'Cirujanos Generales',
+    'Cardiólogos',
+    'Neurólogos',
+    'Pediatras de Emergencia',
+    'Anestesiólogos',
+    'Ginecólogos y Obstetras',
+    'Enfermeros',
+    'Auxiliar de ambulancia',
+    'Conductor de ambulancia',
+    'Enfermero de ambulancia'
+  ];
 
   Future<void> _register() async {
     try {
@@ -32,7 +48,7 @@ class _RegisterViewState extends State<RegisterView> {
         'nombre': _usernameController.text.trim(),
         'rut': _rutController.text.trim(),
         'esPersonalHospital': _isHospitalStaff,
-        'areaDeProfesión': _isHospitalStaff ? _professionAreaController.text.trim() : null,
+        'areaDeProfesión': _isHospitalStaff ? _selectedProfession : null,
         'númeroDeTeléfono': _isHospitalStaff ? _phoneNumberController.text.trim() : null,
       });
 
@@ -50,53 +66,72 @@ class _RegisterViewState extends State<RegisterView> {
       appBar: AppBar(title: const Text('Registrar')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Nombre de Usuario'),
-            ),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Correo Electrónico', errorText: _errorMessage),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Contraseña', errorText: _errorMessage),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Checkbox(
-                  value: _isHospitalStaff,
-                  onChanged: (value) {
-                    setState(() {
-                      _isHospitalStaff = value!;
-                    });
-                  },
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _usernameController,
+                decoration: const InputDecoration(labelText: 'Nombre de Usuario'),
+              ),
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(labelText: 'Correo Electrónico', errorText: _errorMessage),
+              ),
+              TextField(
+                controller: _passwordController,
+                decoration: InputDecoration(labelText: 'Contraseña', errorText: _errorMessage),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Checkbox(
+                    value: _isHospitalStaff,
+                    onChanged: (value) {
+                      setState(() {
+                        _isHospitalStaff = value!;
+                      });
+                    },
+                  ),
+                  const Text('¿Eres personal del hospital?'),
+                ],
+              ),
+              TextField(
+                controller: _rutController,
+                decoration: const InputDecoration(labelText: 'RUT'),
+              ),
+              if (_isHospitalStaff) ...[
+                DropdownButtonFormField<String>(
+                  value: _selectedProfession,
+                  items: _professionOptions.map((profession) {
+                    return DropdownMenuItem(
+                      value: profession,
+                      child: Text(profession),
+                    );
+                  }).toList(),
+                  onChanged: (value) => setState(() {
+                    _selectedProfession = value;
+                  }),
+                  decoration: const InputDecoration(labelText: 'Área de Profesión'),
                 ),
-                const Text('¿Eres personal del hospital?'),
+                TextField(
+                  controller: _phoneNumberController,
+                  decoration: const InputDecoration(labelText: 'Número de Teléfono'),
+                  keyboardType: TextInputType.phone,
+                ),
               ],
-            ),
-            TextField(
-              controller: _rutController,
-              decoration: const InputDecoration(labelText: 'RUT'),
-            ),
-            if (_isHospitalStaff) ...[
-              TextField(
-                controller: _professionAreaController,
-                decoration: const InputDecoration(labelText: 'Área de la Profesión'),
-              ),
-              TextField(
-                controller: _phoneNumberController,
-                decoration: const InputDecoration(labelText: 'Número de Teléfono'),
-              ),
+              const SizedBox(height: 20),
+              ElevatedButton(onPressed: _register, child: const Text('Registrar')),
+              if (_errorMessage != null) ...[
+                const SizedBox(height: 16),
+                Text(
+                  _errorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ],
             ],
-            const SizedBox(height: 20),
-            ElevatedButton(onPressed: _register, child: const Text('Registrar')),
-          ],
+          ),
         ),
       ),
     );

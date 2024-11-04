@@ -1,75 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Importa Firestore aquí
-import 'login_view.dart';
-import 'telegram_view.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
-
-  @override
-  _HomeViewState createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  late String _userRole = 'usuario';
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserRole();
-  }
-
-  Future<void> _fetchUserRole() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      final userDoc = await FirebaseFirestore.instance.collection('usuarios').doc(user.uid).get();
-      if (userDoc.exists && userDoc.data() != null) {
-        setState(() {
-          _userRole = userDoc.data()!['esPersonalHospital'] ? 'personal' : 'usuario';
-        });
-      }
-    }
-  }
-
-  void _logout() async {
-    await _auth.signOut();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginView()));
-  }
+class HomeView extends StatelessWidget {
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Emergency App'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
+            icon: const Icon(Icons.login),
+            onPressed: () {
+              Navigator.pushNamed(context, '/login');
+            },
           ),
         ],
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Bienvenido, $_userRole',
-              style: const TextStyle(fontSize: 24),
+            const Text(
+              'Bienvenido a la App de Emergencias',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const TelegramView()),
-                );
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.green[50],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text(
+                'Métodos de Emergencia',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ListTile(
+              leading: const Icon(Icons.phone_in_talk, color: Colors.green),
+              title: const Text('Llamar a los servicios de emergencia'),
+              subtitle: const Text('En caso de emergencia, llama al 911 o tu número local de emergencias.'),
+              onTap: () {
+                // Placeholder for functionality
               },
-              child: const Text('Abrir Mensajería'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.warning, color: Colors.green),
+              title: const Text('Conoce los procedimientos de primeros auxilios'),
+              subtitle: const Text('Aprende cómo actuar en caso de emergencia.'),
+              onTap: () {
+                // Placeholder for functionality
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info, color: Colors.green),
+              title: const Text('Preparación ante emergencias'),
+              subtitle: const Text('Infórmate sobre cómo prepararte para posibles situaciones de emergencia.'),
+              onTap: () {
+                // Placeholder for functionality
+              },
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.info_outline),
+            label: 'Consejos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Ajustes',
+          ),
+        ],
+        currentIndex: 0, // Highlight the first tab as default
+        onTap: (int index) {
+          // Handle navigation to different sections here
+        },
       ),
     );
   }
