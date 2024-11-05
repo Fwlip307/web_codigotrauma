@@ -31,9 +31,15 @@ class _LoginViewState extends State<LoginView> {
         final userData = userDoc.data();
         if (userData != null && userData.containsKey('esPersonalHospital') && userData.containsKey('nombre')) {
           if (userData['esPersonalHospital'] == true) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePersonalView(userDoc: userData)));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePersonalView(userDoc: userData)),
+            );
           } else {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeUsuarioView(username: userData['nombre'])));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeUsuarioView(username: userData['nombre'])),
+            );
           }
         } else {
           setState(() {
@@ -47,7 +53,7 @@ class _LoginViewState extends State<LoginView> {
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMessage = e.message;
+        _errorMessage = e.message ?? 'Ocurrió un error inesperado. Por favor intenta de nuevo.';
       });
     } catch (e) {
       setState(() {
@@ -60,26 +66,64 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Iniciar Sesión')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(controller: _emailController, decoration: const InputDecoration(labelText: 'Correo Electrónico')),
-            TextField(controller: _passwordController, decoration: const InputDecoration(labelText: 'Contraseña'), obscureText: true),
-            const SizedBox(height: 20),
-            ElevatedButton(onPressed: _login, child: const Text('Iniciar Sesión')),
-            if (_errorMessage != null) ...[
-              const SizedBox(height: 20),
-              Text(_errorMessage!, style: const TextStyle(color: Colors.red)),
-            ],
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/register');
-              },
-              child: const Text('¿No tienes cuenta? Regístrate'),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 400), // Centrado y ancho máximo en pantallas grandes
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Bienvenido de Nuevo',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Correo Electrónico',
+                    prefixIcon: const Icon(Icons.email, color: Colors.green),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Contraseña',
+                    prefixIcon: const Icon(Icons.lock, color: Colors.green),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: const Text('Iniciar Sesión', style: TextStyle(fontSize: 16)),
+                ),
+                if (_errorMessage != null) ...[
+                  const SizedBox(height: 20),
+                  Text(_errorMessage!, style: const TextStyle(color: Colors.red)),
+                ],
+                const SizedBox(height: 16), // Espaciado adicional
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
+                  child: const Text(
+                    '¿No tienes cuenta? Regístrate',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
