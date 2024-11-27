@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'MessagingView.dart'; // Asegúrate de que esta ruta sea correcta
+import 'UserListView.dart';  // Importa la vista de lista de usuarios
 
 class HomePersonalView extends StatelessWidget {
   final Map<String, dynamic> userDoc;
@@ -124,6 +126,22 @@ class HomePersonalView extends StatelessWidget {
                     const SizedBox(height: 20),
                     Text('Cursos de primeros auxilios, gestión de crisis, etc.', style: const TextStyle(fontSize: 16)),
                   ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Botón para ir a la vista de usuarios
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Aquí se va a la lista de usuarios que enviaron mensajes
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserListView(), // Remueve 'const' si UserListView no es un constructor constante
+                      ),
+                    );
+                  },
+                  child: const Text('Ir a Mensajes'),
                 ),
               ),
             ],
